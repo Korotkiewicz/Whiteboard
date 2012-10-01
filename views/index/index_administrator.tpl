@@ -1,0 +1,1 @@
+{eF_template_printBlock title="Panel sterowania modułu interaktywnej tablicy" columns=5 links=$T_WHITEBOARD_OPTIONS image='32x32/home.png'}

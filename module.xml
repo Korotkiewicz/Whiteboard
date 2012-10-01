@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<module>
+	<title>Whiteboard Module</title>
+	<author>Libratus - Michal Korotkiewicz</author>
+	<date>2012 07 13</date>
+	<version>1.0</version>
+	<description>Whiteboard module</description>
+	<className>module_whiteboard</className>
+	<requires>3.6.8</requires>
+</module>

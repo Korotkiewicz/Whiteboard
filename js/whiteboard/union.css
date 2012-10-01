@@ -1,0 +1,53 @@
+#shadow {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#unionWrapper {
+    min-width: 720px;
+}
+
+#userListWrapper {
+    display: block;
+    float: left; 
+    width: 200px;
+    border: 1px solid black;
+    margin: 2px;
+}
+
+#occupantlist {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.unionToolbar {
+    background-color: #679C46;
+    color: #FFFFFF;
+
+    cursor: default;
+
+    font-family: Helvetica, Verdana, sans-serif;
+    font-weight: bold;
+    font-size: smaller;
+
+    padding: 0px;
+    height: 27px;
+}
+
+#logPane {
+    border: inset 2px;
+    height: 200px;
+    width: 600px;
+    overflow:auto;
+    padding: 5px;
+    font-family:monospace;
+    white-space: nowrap;
+}
+
+.clear {
+    clear: both;
+}

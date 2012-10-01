@@ -1,0 +1,46 @@
+#chatWrapper {
+    float: left;
+    display: block;
+    width: 38%;
+    height: 330px;
+    min-width: 200px;
+
+    margin: 2px;
+}
+
+#chatBorder {
+    border: 1px solid black;
+}
+
+#chatInfo {
+    padding: 6px 0px 0px 3px;
+    font-size: 12px;
+}
+
+#chatPane {
+    height: 250px;
+    overflow: auto;
+    padding: 5px;
+    margin-bottom: 5px
+
+
+}
+div#chatPane, div#chatPane div {
+    -moz-user-select: text;
+    -khtml-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+#chatForm {
+    margin-top: 2px;
+}
+
+#outgoing {
+    width:68%;
+}
+
+#chatSubmit {
+    width:30%;
+}

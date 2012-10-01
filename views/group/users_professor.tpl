@@ -1,0 +1,1 @@
+{include file=$T_WHITEBOARD_ADMIN_TPL}

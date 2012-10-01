@@ -1,0 +1,136 @@
+#whiteboardWrapper {
+    float: left;
+    position: relative;
+    display: block;
+    border: 1px solid black;
+    height: 435px;
+    width: 60%;
+    min-width: 520px;
+
+    margin: 2px;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#whiteboard div {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#canvas {
+    display: block;
+    height: 1px;
+    width: 1px;
+    margin: 0px;
+    padding: 0px;
+
+    /*cursor: url("pencil.cur"), url("pencil.gif"), auto;*/
+}
+
+#canvasLocker {
+    position: absolute;
+    top: 27px;
+    left: 0px;
+    width: 600px;
+    height: 408px;
+    background: #ccddbb;
+    opacity: 0.5;
+}
+
+.cursor_pencil {
+    cursor: url("./pencil.cur"), url("./pencil.gif"), auto;
+}
+
+.cursor_eraser {
+    cursor: url("./eraser.cur"), url("./eraser.gif"), auto;
+}
+
+.cursor_text {
+    cursor: url("./text.cur"), url("./text.gif"), auto;
+}
+
+#toolbar {
+
+}
+
+#controls {
+    float: left;
+    display: block;
+    min-width: 345px;
+    margin: 3px 0px 0px 3px;
+    width: 345px;
+}
+
+
+#status {
+    display: inline-block;
+    min-width: 230px;
+
+    float: right;
+
+    font-size: larger;
+    text-align: center;
+
+    margin-top: 6px;
+}
+
+select {
+    font-family: monospace;
+    font-size: medium;
+}
+
+.colorPicker-picker {
+    display: inline-block;
+}
+
+.thicknessPicker-picker {
+    display: inline-block;
+}
+
+.tool, .selectedTool {
+    display: block;
+    float: left;
+    margin: 1px 0px 0px 10px;
+    cursor: pointer;
+
+    border: 1px solid transparent;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+
+    -webkit-box-shadow: 1px 1px 10px 1px rgba(255, 255, 255, 0.5);
+    box-shadow: 1px 1px 10px 1px rgba(255, 255, 255, 0.5);
+}
+
+.tool img, .selectedTool img {
+    display: block;
+}
+
+.selectedTool, a.tool:active, a.tool:hover {
+    border: 1px solid #ccc;
+
+    -webkit-box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.3),
+                        1px 1px 10px 1px rgba(255, 255, 255, 0.5);
+    box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.3),
+                1px 1px 10px 1px rgba(255, 255, 255, 0.5);
+}
+
+a.tool:active {
+    border: 1px solid white;
+}
+
+.canvasText {
+    position: absolute;
+    background: url(textInputBg.png) repeat;
+    
+    font-weight: normal;
+    border: 2px #6073ff dotted;
+    padding-bottom: 0px;
+}
