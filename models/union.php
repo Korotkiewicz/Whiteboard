@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of union
+ * Union class is an interface to remove union server
  *
  * @author Michał
  */

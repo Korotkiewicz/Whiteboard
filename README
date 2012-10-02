@@ -1,0 +1,16 @@
+/******************************************************************************/
+/*                            module_whiteboard                               */
+/*                                                                            */
+/* version: 1.0                                                               */
+/* date:    2012-10-01                                                        */
+/* author:  Michal Korotkiewicz                                               */
+/* company: Bolebor Software & Libratus                                       */
+/*                                                                            */
+/******************************************************************************/
+
+/* Information */
+//
+// module_whiteboard is module to LMS eFront
+// but you can take directory js which consist core functionality and add
+// OrbiterMicro_2.0.0.767_Beta3 from www.unionserver.com (required).
+//
