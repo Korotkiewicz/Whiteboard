@@ -2,6 +2,12 @@
 
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
 
+/**
+ * This class CRUD whiteboard module's configs
+ * 
+ * @author: Michal Korotkiewicz
+ * @copyright (c) 2012
+ */
 class Whiteboard_Config extends Whiteboard_Protect {
 
     /**
@@ -61,8 +67,9 @@ class Whiteboard_Config extends Whiteboard_Protect {
     }
 
     /**
-     *
-     * @param string $section specyfik key
+     * Get config from ini files
+     * 
+     * @param string $section determined key
      * @return mixed - array/string/false - array with data when not set key, string when it is set, false on error
      */
     public function getConfig($section = null) {
@@ -82,6 +89,13 @@ class Whiteboard_Config extends Whiteboard_Protect {
         return $this->_dataFromConfig;
     }
 
+    /**
+     * Save data in config
+     * 
+     * @param array $data
+     * @return boolean
+     * @throws Exception
+     */
     public function saveConfig($data) {
         if ($this->_readOrWrite == 'r') {
             throw new Exception('Config file opened only to read');
@@ -265,5 +279,3 @@ class Whiteboard_Config extends Whiteboard_Protect {
     }
 
 }
-
-?>

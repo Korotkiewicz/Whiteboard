@@ -3,7 +3,8 @@
 /**
  * Union class is an interface to remove union server
  *
- * @author Michał
+ * @author Michal Korotkiewicz
+ * @copyright (c) 2012
  */
 class Union {
 
@@ -31,6 +32,9 @@ class Union {
     private $messages = array('close_room' => '--- Zamykam zajęcia ---', 'open_room' => 'Otwieram zajęcia');
     protected static $salt = 'noifv239hf923f';
 
+    /**
+     * get configuration and set vars
+     */
     public function __construct() {
         require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/config.php';
         $config = new Whiteboard_Config('union');
@@ -39,10 +43,21 @@ class Union {
         $this->URL = 'http://' . $this->config['server']['ip'] . ':' . $this->config['server']['port'];
     }
 
+    /**
+     * disconnect from union server
+     */
     public function __destruct() {
         $this->disconnect();
     }
 
+    /**
+     * Create password for spec user (login) and 2 optional params
+     * 
+     * @param string $login
+     * @param string $param1
+     * @param string $param2
+     * @return string
+     */
     public static function createPassword($login, $param1 = null, $param2 = null) {
         if (is_null($param1))
             $param1 = '';
@@ -52,10 +67,21 @@ class Union {
         return substr(md5($login . $param1 . $param2 . self::$salt), 1, 10);
     }
 
+    /**
+     *  Get Room ID by room name
+     * 
+     * @param string $roomName
+     * @return string
+     */
     public static function getRoomID($roomName) {
         return 'pl.edu.libratus.room.' . $roomName . '.' . substr(md5($roomName . self::$salt), 1, 5);
     }
 
+    /**
+     * Try connect to union server. If correct then return true
+     * 
+     * @return boolean
+     */
     public function connect() {
         try {
             $xml = $this->send('d', $this->makeMsgContent('u65', array('Orbiter', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1;2.0.0 (Build 768)', '1.10.1')));
@@ -89,6 +115,9 @@ class Union {
         return false;
     }
 
+    /**
+     * Disconnect from union server
+     */
     public function disconnect() {
         if ($this->isConnected()) {
             $xml = $this->send('d', $this->makeMsgContent('u86', array($this->userID)));
@@ -97,10 +126,19 @@ class Union {
         }
     }
 
+    /**
+     * Check if connect() has properly connected to union server
+     * 
+     * @return boolean
+     */
     public function isConnected() {
         return $this->handshakeComplite;
     }
 
+    /**
+     * 
+     * @return mixed return false if connection faild or array with connection info (sessionID, clientID, roomID, params)
+     */
     public function getConnectionInfo() {
         if (!$this->isConnected()) {
             return false;
@@ -114,6 +152,13 @@ class Union {
         );
     }
 
+    /**
+     *  Try login user to union server with spec login and password
+     * 
+     * @param string $login
+     * @param string $password
+     * @return boolean true = user login correctly
+     */
     public function login($login, $password) {
         if (!$this->isConnected()) {
             return false;
@@ -135,6 +180,11 @@ class Union {
         return $this->isLogged();
     }
 
+    /**
+     *  Check if user has been logged
+     * 
+     * @return boolean
+     */
     public function isLogged() {
         return $this->logged;
     }
@@ -161,6 +211,12 @@ class Union {
         return false;
     }
 
+    /**
+     * If you want send something to room you need to observed it before
+     * 
+     * @param string $roomID
+     * @return boolean
+     */
     public function observeRoom($roomID) {
         if (!$this->isLogged()) {
             return false;
@@ -188,6 +244,12 @@ class Union {
         return $result;
     }
 
+    /**
+     * Create room. Return true if room exists (for two reason: was created before or has been created now)
+     * 
+     * @param string $roomID
+     * @return boolean
+     */
     public function createRoom($roomID) {
         $roomExist = false;
 
@@ -207,6 +269,14 @@ class Union {
         return $roomExist;
     }
 
+    /**
+     * Close room it meen that nobody can enter the room. It can throw 
+     * Exception if you don't have allowence.
+     * 
+     * @param string $roomID
+     * @return boolean
+     * @throws Exception
+     */
     public function closeRoom($roomID) {
         if (!$this->isLogged()) {
             return false;
@@ -226,6 +296,13 @@ class Union {
         return $isClosed;
     }
 
+    /**
+     * Open closed room. It can throw Exception if you don't have allowence
+     * 
+     * @param string $roomID
+     * @return boolean
+     * @throws Exception
+     */
     public function openRoom($roomID) {
         if (!$this->isLogged()) {
             return false;
@@ -244,6 +321,13 @@ class Union {
         return $isOpen;
     }
 
+    /**
+     * 
+     * @param type $roomID
+     * @param type $attrName
+     * @param type $attrValue
+     * @return boolean
+     */
     public function updateRoomAttribute($roomID, $attrName, $attrValue) {
         $xml = $this->send('d', $this->makeMsgContent('u5', array($roomID, $attrName, $attrValue, 12))); //FLAG_SHARED | FLAG_PERSISTENT
         $responses = $this->parseResponse($xml);
@@ -268,6 +352,13 @@ class Union {
         return false;
     }
 
+    /**
+     * Prepare message to send to union server
+     * 
+     * @param string $messageID
+     * @param string $values
+     * @return string
+     */
     public function makeMsgContent($messageID, $values = null) {
         $string = '<U>';
         $string .= "<M>$messageID</M>";
@@ -417,7 +508,8 @@ class Union {
     }
 
     /**
-     *
+     * Send message to union server
+     * 
      * @param string $mode UPC send msg mode ('d','c','s')
      * @param string $data Content of msg
      * @param string $sid After correct connect() it doesn't have to be set

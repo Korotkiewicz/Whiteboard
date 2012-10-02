@@ -1,9 +1,24 @@
 <?php
 
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
-
+/**
+ * This class has method to retrive information about user from DB:
+ * 
+ * + getProfessorList
+ * + getStudentList
+ * + getTeachers
+ * 
+ * @author Michal Korotkiewicz
+ * @copyright (c) 2012
+ */
 class Whiteboard_User extends Whiteboard_Protect {
 
+    /**
+     * 
+     * @param bool $getGroupInfo
+     * @param string $gkey
+     * @return array
+     */
     public static function getProfessorList($getGroupInfo = false, $gkey = null) {
         $table = 'users u';
         $columns = 'u.*';
@@ -31,6 +46,12 @@ class Whiteboard_User extends Whiteboard_Protect {
         return $data;
     }
 
+    /**
+     * 
+     * @param string $gkey
+     * @param string $professorLogin
+     * @return array
+     */
     public static function getStudentList($gkey = null, $professorLogin = null) {
         $table = 'users u JOIN module_applyschool_data AS data ON u.login = data.users_login';
         $columns = 'u.*, data.*';
@@ -91,6 +112,10 @@ class Whiteboard_User extends Whiteboard_Protect {
         return $data;
     }
 
+    /**
+     * 
+     * @return array
+     */
     public static function getTeachers() {
         $data = eF_getTableData('module_whiteboard_user_to_groups AS g JOIN users ON g.login = users.login AND users.user_type = \'professor\'');
         

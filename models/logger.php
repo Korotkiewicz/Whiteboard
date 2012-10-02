@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * This class is normal logger
+ * 
+ * @author Michal Korotkiewicz
+ * @copyright (c) 2012
+ */
 class Whiteboard_Logger {
 
     protected $_filePath = null;
@@ -71,7 +77,8 @@ class Whiteboard_Logger {
     }
 
     /**
-     *
+     * Allow log info on given $level
+     * 
      * @param string $level level of log
      * @param string $message message to log
      * @param string $login user login, not required, put in log file in <$login>
@@ -172,6 +179,9 @@ class Whiteboard_Logger {
     }
 }
 
+/**
+ * Whiteboard_Logger throw this exception
+ */
 class Whiteboard_Logger_Exception extends Exception {
 
     public function __construct($message = "", $code = 0, $previous = null) {

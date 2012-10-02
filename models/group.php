@@ -1,8 +1,17 @@
 <?php
 
+//depend on:
 require_once G_ROOTPATH . 'www/modules/module_applyschool/lib/time.php';
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
 
+/**
+ * require module_applyschool/lib/time.php
+ * 
+ * Model Whiteboard_Group CRUD group.
+ * 
+ * @author Michal Korotkiewicz
+ * @copyright (c) 2012
+ */
 class Whiteboard_Group extends Whiteboard_Protect {
 
     protected static $table = 'module_whiteboard_group';
@@ -11,6 +20,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
     protected $courseId;
     protected $state;
     protected $options = array('course_id' => null, 'day_of_week' => null, 'time' => null, 'frequency' => null, 'shift_week' => null);
+
     const CHANGE_STATE = 'state';
     const CHANGE_USER = 'user';
     const USER_ENTER_INTO_ROOM = 'room';
@@ -25,12 +35,23 @@ class Whiteboard_Group extends Whiteboard_Protect {
     protected static $weeksFromStart = false;
     protected static $oneDaySeconds = 86400; //60 * 60 * 24
 
+    /**
+     * 
+     * @param string $gkey this is group unique key
+     */
+
     public function __construct($gkey) {
         $gkey = self::protectDB($gkey);
 
         $this->gkey = $gkey;
     }
 
+    /**
+     * Return information about all groups
+     * 
+     * @param boolean $pure
+     * @return mixed return false or array
+     */
     public function getData($pure = false) {
         if (!$this->gkey) {
             return false;
@@ -55,6 +76,12 @@ class Whiteboard_Group extends Whiteboard_Protect {
         }
     }
 
+    /**
+     * Set courseId to object of this class.
+     * 
+     * @param string $courseId
+     * @return boolean
+     */
     public function setCourse($courseId) {
         $courseId = self::protectDB($courseId);
         if ($courseId) {
@@ -65,6 +92,12 @@ class Whiteboard_Group extends Whiteboard_Protect {
         return false;
     }
 
+    /**
+     * Set options of specified group
+     * 
+     * @param string $options
+     * @return boolean
+     */
     public function setOptions($options) {
         $course_id = null;
         $time = null;
@@ -84,6 +117,12 @@ class Whiteboard_Group extends Whiteboard_Protect {
         return true;
     }
 
+    /**
+     * Set new gKey couse that method presis will try change gkey.
+     * 
+     * @param string $gkey
+     * @return boolean
+     */
     public function setNewGKey($gkey) {
         $gkey = self::protectDB($gkey);
         if ($gkey) {
@@ -96,6 +135,8 @@ class Whiteboard_Group extends Whiteboard_Protect {
 
     /**
      * Insert or update group with set gkey, name, and state
+     * If setNewGKey was invoked and new gkey is occupied then return false and
+     * not persist other changes.
      * 
      * @return boolean
      */
@@ -192,6 +233,24 @@ class Whiteboard_Group extends Whiteboard_Protect {
         return false; //err
     }
 
+    /**
+     * Return group history
+     * 
+     * @return array
+     */
+    public function getHistory() {
+        $data = eF_getTableData('module_whiteboard_history', '*', "gkey = '{$this->gkey}'", 'date');
+
+        return $data;
+    }
+
+    /**
+     * Insert new history log
+     * 
+     * @param string $what
+     * @param string $value
+     * @return boolean
+     */
     protected function history($what, $value) {
         $data = array(
             'gkey' => $this->gkey,
@@ -225,12 +284,6 @@ class Whiteboard_Group extends Whiteboard_Protect {
         return true;
     }
 
-    public function getHistory() {
-        $data = eF_getTableData('module_whiteboard_history', '*', "gkey = '{$this->gkey}'", 'date');
-
-        return $data;
-    }
-
     /**
      * Check if group is deleted, set state in internal variable
      * 
@@ -250,6 +303,11 @@ class Whiteboard_Group extends Whiteboard_Protect {
         return $this->state == 'deleted';
     }
 
+    /**
+     * Delete group (set group state to deleted)
+     * 
+     * @return boolean
+     */
     public function delete() {
         if (!$this->gkey) {
             return false;
@@ -266,6 +324,11 @@ class Whiteboard_Group extends Whiteboard_Protect {
         }
     }
 
+    /**
+     * Undelete group
+     * 
+     * @return boolean
+     */
     public function undelete() {
         if (!$this->gkey) {
             return false;
@@ -398,54 +461,59 @@ class Whiteboard_Group extends Whiteboard_Protect {
 
         return ($data ? true : false);
     }
-    
+
     public function setNextMeeting($date, $returnWarnings = false) {
         $date = str_replace('.', ':', $date);
-        
-        if(!preg_match('/^\d{4}[-]\d{2}[-]\d{2} \d{2}([:]\d{2}([:]\d{2})?)?$/', $date, $matches)) {
-            if($returnWarnings) {
+
+        if (!preg_match('/^\d{4}[-]\d{2}[-]\d{2} \d{2}([:]\d{2}([:]\d{2})?)?$/', $date, $matches)) {
+            if ($returnWarnings) {
                 return 'zły format: ' . $date;
             } else {
                 return false;
             }
         }
-        
-        if(!$matches[1]) {
+
+        if (!$matches[1]) {
             $date .= ':00:00';
-        } elseif(!$matches[2]) {
+        } elseif (!$matches[2]) {
             $date .= ':00';
         }
-        
+
         $originalDate = $this->getMeetingDateInWeek(null, true);
-        
+
         $where = "gkey = '{$this->gkey}' AND is_done = 0";
-        
-        if($originalDate == $date) {
+
+        if ($originalDate == $date) {
             eF_deleteTableData('module_whiteboard_group_next_meeting', $where);
-            if($returnWarnings) {
+            if ($returnWarnings) {
                 return 'original';
             } else {
                 return true;
             }
         }
-        
+
         $fields = array(
             'gkey' => $this->gkey,
             'date' => $date,
             'is_done' => 0
         );
-        
+
         try {
             eF_insertOrupdateTableData('module_whiteboard_group_next_meeting', $fields, $where);
-        } catch(Exception $e) {
-            if($e->getCode() == 1062) {
+        } catch (Exception $e) {
+            if ($e->getCode() == 1062) {
                 eF_updateTableData('module_whiteboard_group_next_meeting', array('is_done' => 0), "gkey = '{$this->gkey}' AND date = '$date'");
             }
         }
-        
+
         return true;
     }
 
+    /**
+     * Return array with occupant list
+     * 
+     * @return array
+     */
     public function getOccupantList() {
         $data = eF_getTableData('module_whiteboard_user_to_groups utog 
                                 JOIN users ON utog.login = users.login
@@ -453,12 +521,12 @@ class Whiteboard_Group extends Whiteboard_Protect {
                                 LEFT JOIN module_applyschool_countries AS country ON data.address_country_code = country.code', 'users.login, users.user_type, users.avatar, users.timezone, IF(data.student_name, data.student_name, users.name) AS name, IF(data.student_surname, data.student_surname, users.surname) AS surname, country.code AS country_code, country.name AS country_name, users.email, users.Skype, if(data.cellphone_number1, data.cellphone_number1, users.Telefon) AS Telefon', "gkey = '{$this->gkey}'");
 
         $defaultTimezone = date('e');
-        for($i = 0, $count = count($data); $i < $count; ++$i) {
+        for ($i = 0, $count = count($data); $i < $count; ++$i) {
             date_default_timezone_set($data[$i]['timezone']);
             $data[$i]['timezoneOffset'] = date('P');
         }
         date_default_timezone_set($defaultTimezone);
-                                
+
         return $data;
     }
 
@@ -492,12 +560,19 @@ class Whiteboard_Group extends Whiteboard_Protect {
         return $data;
     }
 
+    /**
+     * 
+     * 
+     * @param string $weekNo
+     * @param boolean $returnOnlyOriginal if true then return only scheduled date (not set manualy by teacher (if one is set))
+     * @return mixed return false if you try to get information about past week (weekNo). Normally return date string (Y-m-d H:i:s) of next meeting
+     */
     public function getMeetingDateInWeek($weekNo = null, $returnOnlyOriginal = false) {
         $this->loadModel('week', 'module_features');
         $weekModel = new ModuleFeatures_WeekModel();
         $actualWeekNo = $weekModel->getActualWeekNo();
-        
-        if(is_null($weekNo)) {
+
+        if (is_null($weekNo)) {
             $weekNo = $actualWeekNo;
         }
 
@@ -506,8 +581,8 @@ class Whiteboard_Group extends Whiteboard_Protect {
         }
 
         $data = $this->getData();
-        
-        if($returnOnlyOriginal) {
+
+        if ($returnOnlyOriginal) {
             unset($data['next_lesson']);
         }
 
@@ -516,7 +591,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
             return $nextLessonInPostedWeek;
         } else {
             $nextLesson = $this->getNextLessonDate($data['day_of_week'], $data['time'], $data['frequency'], $data['shift_week']);
-            
+
             //if next_lesson from now is the same as next lesson in posted weekNo then return custom next_lesson set in $data:
             if ($nextLesson == $nextLessonInPostedWeek) {
                 return $data['next_lesson'];
@@ -526,6 +601,12 @@ class Whiteboard_Group extends Whiteboard_Protect {
         }
     }
 
+    /**
+     * This method is used to prepare static vars on load
+     * 
+     * @param bool $force
+     * @return boolean
+     */
     public static function prepareStatic($force = false) {
         if ($force || !self::$prepared) {
             self::staticLoadModel('config');
@@ -615,6 +696,16 @@ class Whiteboard_Group extends Whiteboard_Protect {
         return $data;
     }
 
+    /**
+     * Prepare next date of meeting depending on given params
+     * 
+     * @param int $day_of_week
+     * @param int $time
+     * @param int $frequency
+     * @param int $shift_week
+     * @param int $fromWeeksInFuture
+     * @return mixed return false if it is not resolved
+     */
     public static function getNextLessonDate($day_of_week, $time, $frequency, $shift_week, $fromWeeksInFuture = 0) {
         self::prepareStatic();
 
@@ -657,6 +748,12 @@ class Whiteboard_Group extends Whiteboard_Protect {
         }
     }
 
+    /**
+     * Return user's group info
+     * 
+     * @param string $login
+     * @return boolean
+     */
     public static function getUsersGroupList($login) {
         $login = self::protectDB($login);
         if (!$login) {
@@ -668,11 +765,20 @@ class Whiteboard_Group extends Whiteboard_Protect {
         return $groups['gkey'];
     }
 
+    /**
+     * 
+     * @return array
+     */
     public static function getAllGroupInfo() {
         $groups = eF_getTableData(self::$table . ' g LEFT JOIN courses ON g.course_id = courses.id', 'g.gkey, g.course_id, g.state, IF(courses.name IS NOT NULL, courses.name, g.gkey) AS course_name', "state != 'deleted'");
         return $groups;
     }
 
+    /**
+     * 
+     * @param type $login
+     * @return mixed return false if login not set correctly
+     */
     public static function getUsersGroupInfo($login) {
         $login = self::protectDB($login);
         if (!$login) {
@@ -680,15 +786,19 @@ class Whiteboard_Group extends Whiteboard_Protect {
         }
 
         $groups = eF_getTableData('module_whiteboard_user_to_groups utog JOIN ' . self::$table . ' g ON utog.gkey = g.gkey LEFT JOIN courses ON g.course_id = courses.id', 'g.gkey, g.course_id, g.state, IF(courses.name IS NOT NULL, courses.name, g.gkey) AS course_name', "login = '$login' AND state != 'deleted'");
-        
-        for($i = 0, $count = count($groups); $i < $count; ++$i) {
+
+        for ($i = 0, $count = count($groups); $i < $count; ++$i) {
             $group = new self($gkey);
             $groups[$i]['next_lesson'] = $group->getMeetingDateInWeek();
         }
-        
+
         return $groups;
     }
 
+    /**
+     * 
+     * @return mixed return false if course not exists. Normally return assoc array(courseId => name,...)
+     */
     public static function getCourses() {
         $where = 'active = 1 AND archive = 0';
 
