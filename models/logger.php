@@ -8,7 +8,7 @@ namespace Whiteboard;
  * @author Michal Korotkiewicz
  * @copyright (c) 2012
  */
-class Whiteboard_Logger {
+class Logger {
 
     protected $_filePath = null;
     protected $_levelName = 'INFO';
@@ -17,7 +17,7 @@ class Whiteboard_Logger {
     protected $_allowedLevels = array('ALL' => 5, 'DEBUG' => 4, 'INFO' => 3, 'WARNING' => 2, 'ERROR' => 1);
     /**
      *
-     * @var Whiteboard_Logger
+     * @var Logger
      */
     protected static $instance = null;
 
@@ -43,7 +43,7 @@ class Whiteboard_Logger {
      * At first use you must post filePath
      * @param string $filePath path to log file
      * @param bool $showUri if true then log uri of request
-     * @return Whiteboard_Logger
+     * @return Logger
      */
     public static function getInstance($filePath = null, $level = null, $showUri = null) {
         if (is_null(self::$instance)) {

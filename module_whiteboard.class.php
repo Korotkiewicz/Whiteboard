@@ -34,7 +34,7 @@ class module_whiteboard extends EfrontModule {
 
         if (isset($_REQUEST['op']) && $_REQUEST['op'] == 'module_whiteboard' && !$this->checkIfHelpWindow()) {
             require_once $this->moduleBaseDir . 'models/logger.php';
-            $this->errorLog = \Whiteboard\Whiteboard_Logger::getInstance($this->moduleBaseDir . 'logs/error.log');
+            $this->errorLog = \Whiteboard\Logger::getInstance($this->moduleBaseDir . 'logs/error.log');
 
             $this->controller_name = $_GET['c'] ? $_GET['c'] : 'index';
             $this->userType = $this->getCurrentUser()->user['user_type'];

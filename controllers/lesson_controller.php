@@ -24,7 +24,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
         $this->assign('DOJO', 1);
 
         $this->loadClass('models/logger');
-        Whiteboard_Logger::getInstance()->info('User enter dojo', $this->userLogin);
+        Logger::getInstance()->info('User enter dojo', $this->userLogin);
 
         $correctBrowser = $this->_checkBrowser();
         $this->smarty->assign('T_CORRECT_BROWSER', $correctBrowser);
@@ -60,7 +60,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
 //        }
 
         $this->loadClass('models/logger');
-        Whiteboard_Logger::getInstance()->info('User enter room: ' . $gkey, $this->userLogin);
+        Logger::getInstance()->info('User enter room: ' . $gkey, $this->userLogin);
 
         $correctBrowser = $this->_checkBrowser();
         $this->smarty->assign('T_CORRECT_BROWSER', $correctBrowser);
@@ -160,7 +160,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
                     false;
 
             if (!$find) {
-                Whiteboard_Logger::getInstance()->info('Browser does\'t match', $this->userLogin);
+                Logger::getInstance()->info('Browser does\'t match', $this->userLogin);
             } else {
                 if ($match[2] == 'safari') {
                     $tmp = $match[2];
@@ -208,17 +208,17 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
                         }
                         break;
                     default:
-                        Whiteboard_Logger::getInstance()->warning('Browser not detected (name:' . $browserName . ',version:' . $browserVersion . '): ' . $browserInfo, $this->userLogin);
+                        Logger::getInstance()->warning('Browser not detected (name:' . $browserName . ',version:' . $browserVersion . '): ' . $browserInfo, $this->userLogin);
                         break;
                 }
             }
             if ($correctBrowser) {
-                Whiteboard_Logger::getInstance()->info('Ok browser(name:' . $browserName . ',version:' . $browserVersion . '): ' . $browserInfo, $this->userLogin);
+                Logger::getInstance()->info('Ok browser(name:' . $browserName . ',version:' . $browserVersion . '): ' . $browserInfo, $this->userLogin);
             } else {
-                Whiteboard_Logger::getInstance()->info('Wrong browser(name:' . $browserName . ',version:' . $browserVersion . '): ' . $browserInfo, $this->userLogin);
+                Logger::getInstance()->info('Wrong browser(name:' . $browserName . ',version:' . $browserVersion . '): ' . $browserInfo, $this->userLogin);
             }
         } else {
-            Whiteboard_Logger::getInstance()->warning('No browserInfo set', $this->userLogin);
+            Logger::getInstance()->warning('No browserInfo set', $this->userLogin);
         }
 
         return $correctBrowser;

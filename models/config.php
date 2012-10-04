@@ -84,7 +84,7 @@ class Config extends Protect {
                 return $this->_dataFromConfig[$section];
             } else {
                 $this->loadModel('Logger');
-                Whiteboard_Logger::getInstance()->debug('There is no value for key ' . $section . ' in config file for ' . $this->_selected);
+                Logger::getInstance()->debug('There is no value for key ' . $section . ' in config file for ' . $this->_selected);
                 return false;
             }
         }
@@ -150,7 +150,7 @@ class Config extends Protect {
         //unlock file
         if (!flock($this->_fileHandler, LOCK_UN)) {
             $this->loadModel('Logger');
-            Whiteboard_Logger::getInstance()->warning('Unlocking config file: ' . $this->_configFiles[$this->_selected] . ' failed');
+            Logger::getInstance()->warning('Unlocking config file: ' . $this->_configFiles[$this->_selected] . ' failed');
         }
 
         return true;
@@ -236,7 +236,7 @@ class Config extends Protect {
             $this->_dataFromConfig = null;
 
             $this->loadModel('Logger');
-            Whiteboard_Logger::getInstance()->debug('Config file for ' . $this->_selected . ' not exists');
+            Logger::getInstance()->debug('Config file for ' . $this->_selected . ' not exists');
             return false;
         }
 
@@ -253,7 +253,7 @@ class Config extends Protect {
             $path = realpath($this->_configFiles[$this->_selected]);
             if (!$path or !file_exists($path)) {
                 $this->loadModel('Logger');
-                Whiteboard_Logger::getInstance()->warning('Config file for ' . $this->_selected . ' not exists');
+                Logger::getInstance()->warning('Config file for ' . $this->_selected . ' not exists');
                 return false;
             }
 
@@ -261,7 +261,7 @@ class Config extends Protect {
             $this->_fileHandler = fopen($path, $this->_readOrWrite);
             if (!$this->_fileHandler) {
                 $this->loadModel('Logger');
-                Whiteboard_Logger::getInstance()->warning('Problem with open config (for: ' . $this->_selected . ') file: ' . $this->_configFiles[$this->_selected]);
+                Logger::getInstance()->warning('Problem with open config (for: ' . $this->_selected . ') file: ' . $this->_configFiles[$this->_selected]);
                 return false;
             }
 

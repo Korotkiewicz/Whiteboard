@@ -40,13 +40,13 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
 
     public function index_administrator() {
 //        $this->loadClass('models/union');
-//        $union = new Union();
+//        $union = new \Union();
 //
 //        $gkey = 'p1ew_g2';
 //
 //        if ($union->connect()) {
-//            if ($union->login($this->userLogin, Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']))) {
-//                $result = $union->closeRoom(Union::getRoomID($gkey));
+//            if ($union->login($this->userLogin, \Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']))) {
+//                $result = $union->closeRoom(\Union::getRoomID($gkey));
 //            }
 //        }
 //
@@ -242,27 +242,27 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         $this->loadClass('models/logger');
         $this->loadClass('models/group');
 
-        Whiteboard_Logger::getInstance()->debug('User try to open/close group: ' . $gkey, $this->userLogin);
+        Logger::getInstance()->debug('User try to open/close group: ' . $gkey, $this->userLogin);
         try {
             $group = new Group($gkey);
 
             if ($this->userType == 'professor') {
                 if (!$group->isOccupant($this->userLogin)) {
-                    throw new Exception('not allowed');
+                    throw new \Exception('not allowed');
                 }
             }
 
 
             $this->loadClass('models/union');
-            $union = new Union();
+            $union = new \Union();
             if ($union->connect()) {
-                if (!$union->login($this->userLogin, Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']))) {
-                    throw new Exception('problem with login to union server');
+                if (!$union->login($this->userLogin, \Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']))) {
+                    throw new \Exception('problem with login to union server');
                 }
             } else {
-                throw new Exception('problem with connection to union server');
+                throw new \Exception('problem with connection to union server');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo 'false';
             exit;
         }
@@ -270,20 +270,20 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         try {
             $open = $group->isOpen();
             if ($open) {
-                $result = true; //$union->closeRoom(Union::getRoomID($gkey));
-                $union->sendMsgToRoom(Union::getRoomID($gkey), Union::_MSG_SYSTEM, 'Zajęcia zakończyły się');
+                $result = true; //$union->closeRoom(\Union::getRoomID($gkey));
+                $union->sendMsgToRoom(\Union::getRoomID($gkey), \Union::_MSG_SYSTEM, 'Zajęcia zakończyły się');
 
                 if ($result) {
                     $result = $group->close();
                 }
             } else {
-                $result = $union->openRoom(Union::getRoomID($gkey));
+                $result = $union->openRoom(\Union::getRoomID($gkey));
 
                 if ($result) {
                     $result = $group->open();
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo '<span style="color: red;">' . $e->getMessage() . '</span>';
             exit;
         }
