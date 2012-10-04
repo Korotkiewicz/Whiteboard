@@ -38,7 +38,7 @@ class Union {
      */
     public function __construct() {
         require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/config.php';
-        $config = new Whiteboard_Config('union');
+        $config = new \Whiteboard\Config('union');
         $this->config = $config->getConfig();
 
         $this->URL = 'http://' . $this->config['server']['ip'] . ':' . $this->config['server']['port'];
