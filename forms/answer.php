@@ -1,11 +1,12 @@
 <?php
+namespace Whiteboard;
 
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/forms/abstract.php';
 
 /**
  * @author Michał Korotkiewicz
  */
-class Whiteboard_AnswerForm extends Whiteboard_AbstractForm {
+class AnswerForm extends AbstractForm {
 
     public function __construct($isAdmin = false) {
         parent::__construct();

@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 //depend on:
 require_once G_ROOTPATH . 'www/modules/module_applyschool/lib/time.php';
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
@@ -8,11 +10,9 @@ require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
  * require module_applyschool/lib/time.php
  * 
  * Model Whiteboard_Group CRUD group.
- * 
- * @author Michal Korotkiewicz
  * @copyright (c) 2012
  */
-class Whiteboard_Group extends Whiteboard_Protect {
+class Group extends Protect {
 
     protected static $table = 'module_whiteboard_group';
     protected $gkey;
@@ -211,7 +211,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
                     }
 
                     $result = true;
-                    $this->history(Whiteboard_Group::CHANGE_DATA, serialize($data));
+                    $this->history(Group::CHANGE_DATA, serialize($data));
                 } else {
                     $result = false;
                 }
@@ -279,7 +279,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
         }
 
         $value = $_SERVER['HTTP_USER_AGENT'];
-        $this->history(Whiteboard_Group::USER_ENTER_INTO_ROOM, $value);
+        $this->history(Group::USER_ENTER_INTO_ROOM, $value);
 
         return true;
     }
@@ -317,7 +317,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
         if ($GLOBALS['db']->Affected_Rows() >= 0) {
             $this->state = 'deleted';
 
-            $this->history(Whiteboard_Group::CHANGE_STATE, $this->state);
+            $this->history(Group::CHANGE_STATE, $this->state);
             return true;
         } else {
             return false;
@@ -338,7 +338,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
         if ($GLOBALS['db']->Affected_Rows() >= 0) {
             $this->state = 'closed';
 
-            $this->history(Whiteboard_Group::CHANGE_STATE, $this->state);
+            $this->history(Group::CHANGE_STATE, $this->state);
             return true;
         } else {
             return false;
@@ -378,7 +378,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
         if ($GLOBALS['db']->Affected_Rows() >= 0) {
             $this->state = 'open';
 
-            $this->history(Whiteboard_Group::CHANGE_STATE, $this->state);
+            $this->history(Group::CHANGE_STATE, $this->state);
             return true;
         } else {
             return false;
@@ -400,7 +400,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
             $this->state = 'closed';
 
             eF_updateTableData('module_whiteboard_group_next_meeting', array('is_done' => 1), "gkey = '{$this->gkey}'");
-            $this->history(Whiteboard_Group::CHANGE_STATE, $this->state);
+            $this->history(Group::CHANGE_STATE, $this->state);
             return true;
         } else {
             return false;
@@ -423,7 +423,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
         if ($this->isOccupant($login)) {
             if (eF_deleteTableData('module_whiteboard_user_to_groups', "login = '$login' AND gkey = '{$this->gkey}'")) {
 
-                $this->history(Whiteboard_Group::CHANGE_USER, 'remove: ' . $login);
+                $this->history(Group::CHANGE_USER, 'remove: ' . $login);
                 return 0;
             } else {
                 return false;
@@ -436,7 +436,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
 
             if (eF_insertTableData('module_whiteboard_user_to_groups', $fields)) {
 
-                $this->history(Whiteboard_Group::CHANGE_USER, 'add: ' . $login);
+                $this->history(Group::CHANGE_USER, 'add: ' . $login);
                 return 1;
             } else {
                 return false;
@@ -610,7 +610,7 @@ class Whiteboard_Group extends Whiteboard_Protect {
     public static function prepareStatic($force = false) {
         if ($force || !self::$prepared) {
             self::staticLoadModel('config');
-            $config = new Whiteboard_Config('group');
+            $config = new Config('group');
             $config = $config->getConfig('default');
 
             self::staticLoadModel('../lib/time', 'module_applyschool');

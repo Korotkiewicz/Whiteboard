@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 class Whiteboard_ConfigController extends Whiteboard_AbstractController {
 
     public function powers_administrator() {
@@ -10,7 +12,7 @@ class Whiteboard_ConfigController extends Whiteboard_AbstractController {
         $this->smarty->assign("T_MODULE_BASEURL", $this->baseUrl);
 
         $this->loadClass('models/user');
-        $data = Whiteboard_User::getProfessorList(true);
+        $data = User::getProfessorList(true);
 
         $this->assign('DATA', $this->filter($data));
         $this->render(false);
@@ -25,7 +27,7 @@ class Whiteboard_ConfigController extends Whiteboard_AbstractController {
 
         if ($gkey = $this->getParam('gkey')) {
             $this->loadClass('models/group');
-            $group = new Whiteboard_Group($gkey);
+            $group = new Group($gkey);
             $result = $group->addRemoveUser($login);
             
             if ($result !== false) {
@@ -51,8 +53,8 @@ class Whiteboard_ConfigController extends Whiteboard_AbstractController {
         $this->smarty->assign("T_MODULE_BASEURL", $this->baseUrl);
 
         $this->loadClass('models/group');
-        $tmpData = Whiteboard_Group::getList();
-        $userGroups = Whiteboard_Group::getUsersGroupList($login);
+        $tmpData = Group::getList();
+        $userGroups = Group::getUsersGroupList($login);
         
         $data = array();
         foreach ($tmpData as $row) {

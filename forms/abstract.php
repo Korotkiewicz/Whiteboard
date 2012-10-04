@@ -1,9 +1,10 @@
 <?php
+namespace Whiteboard;
 
 /**
  * @author Michał Korotkiewicz
  */
-abstract class Whiteboard_AbstractForm extends HTML_QuickForm {
+abstract class AbstractForm extends \HTML_QuickForm {
 
     private $_myDefaultRenderer;
 
@@ -40,7 +41,7 @@ abstract class Whiteboard_AbstractForm extends HTML_QuickForm {
         unset($this->_rules[$elementName], $this->_errors[$elementName]);
 
         if (is_null($el)) {
-            throw new Exception($elementName . ' can not has remove rules');
+            throw new \Exception($elementName . ' can not has remove rules');
         }
         if ('group' == $el->getType()) {
             foreach (array_keys($el->getElements()) as $key) {
@@ -56,7 +57,7 @@ abstract class Whiteboard_AbstractForm extends HTML_QuickForm {
      * @return HTML_QuickForm_Renderer_ArraySmarty
      */
     public function setDefaultRenderer($smarty) {
-        $this->_myDefaultRenderer = new HTML_QuickForm_Renderer_ArraySmarty($smarty);
+        $this->_myDefaultRenderer = new \HTML_QuickForm_Renderer_ArraySmarty($smarty);
 
         $this->_myDefaultRenderer->setRequiredTemplate(
                 '{if $required}
@@ -76,7 +77,7 @@ abstract class Whiteboard_AbstractForm extends HTML_QuickForm {
 
         foreach ($this->_elementIndex as $id => $int) {
             if ($int > 0) {
-                if (!isset($submitValues[$id]) and ($this->_elements[$int] instanceof HTML_QuickForm_checkbox)) {
+                if (!isset($submitValues[$id]) and ($this->_elements[$int] instanceof \HTML_QuickForm_checkbox)) {
                     $submitValues[$id] = 0;
                     unset($this->_submitValues[$id]);
                 }

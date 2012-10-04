@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
 
 /**
@@ -8,7 +10,7 @@ require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
  * @author: Michal Korotkiewicz
  * @copyright (c) 2012
  */
-class Whiteboard_Config extends Whiteboard_Protect {
+class Config extends Protect {
 
     /**
      *

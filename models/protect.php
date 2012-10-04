@@ -1,6 +1,8 @@
 <?php
 
-abstract class Whiteboard_Protect {
+namespace Whiteboard;
+
+abstract class Protect {
 
     public static function protectDB($string, $htmlTag = null) {
         if($htmlTag) {

@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 /**
  * This class is normal logger
  * 
@@ -24,7 +26,7 @@ class Whiteboard_Logger {
         if (!file_exists($filePath)) {
             $h = @fopen($filePath, 'w');
             if (!$h) {
-                throw new Whiteboard_Logger_Exception('File ' . $filePath . ' not exist and can not be create');
+                throw new Logger_Exception('File ' . $filePath . ' not exist and can not be create');
             }
             fclose($h);
         }
@@ -46,7 +48,7 @@ class Whiteboard_Logger {
     public static function getInstance($filePath = null, $level = null, $showUri = null) {
         if (is_null(self::$instance)) {
             if (is_null($filePath)) {
-                throw new Whiteboard_Logger_Exception('At first use of getInstance you must post filePath');
+                throw new Logger_Exception('At first use of getInstance you must post filePath');
             }
             self::$instance = new self($filePath, $level, $showUri);
         }
@@ -61,7 +63,7 @@ class Whiteboard_Logger {
     public function setLevel($level) {
         $level = strtoupper($level);
         if (!array_key_exists($level, $this->_allowedLevels)) {
-            throw new Whiteboard_Logger_Exception('Level to set: ' . $level . ' is not allowed');
+            throw new Logger_Exception('Level to set: ' . $level . ' is not allowed');
         }
 
         $this->_levelName = $level;
@@ -85,7 +87,7 @@ class Whiteboard_Logger {
      */
     public function log($level, $message, $login = null) {
         if (!isset($this->_allowedLevels[$level])) {
-            throw new Whiteboard_Logger_Exception('Level ' . $level . ' is not allowed');
+            throw new Logger_Exception('Level ' . $level . ' is not allowed');
         }
         
         if ($this->_levelValue >= $this->_allowedLevels[$level]) {
@@ -182,7 +184,7 @@ class Whiteboard_Logger {
 /**
  * Whiteboard_Logger throw this exception
  */
-class Whiteboard_Logger_Exception extends Exception {
+class Logger_Exception extends \Exception {
 
     public function __construct($message = "", $code = 0, $previous = null) {
         $message = 'Whiteboard_Logger error: ' . $message;

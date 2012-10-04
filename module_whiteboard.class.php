@@ -5,6 +5,8 @@ if (str_replace(DIRECTORY_SEPARATOR, "/", __FILE__) == $_SERVER['SCRIPT_FILENAME
     exit;
 }
 
+use Whiteboard;
+
 /*
  * Class defining the new module
  * The name must match the one provided in the module.xml file
@@ -32,7 +34,7 @@ class module_whiteboard extends EfrontModule {
 
         if (isset($_REQUEST['op']) && $_REQUEST['op'] == 'module_whiteboard' && !$this->checkIfHelpWindow()) {
             require_once $this->moduleBaseDir . 'models/logger.php';
-            $this->errorLog = Whiteboard_Logger::getInstance($this->moduleBaseDir . 'logs/error.log');
+            $this->errorLog = \Whiteboard\Whiteboard_Logger::getInstance($this->moduleBaseDir . 'logs/error.log');
 
             $this->controller_name = $_GET['c'] ? $_GET['c'] : 'index';
             $this->userType = $this->getCurrentUser()->user['user_type'];
@@ -52,10 +54,14 @@ class module_whiteboard extends EfrontModule {
 
             require_once 'controllers/abstract_controller.php';
             require_once 'controllers/' . $this->controller_name . '_controller.php';
-            $controller = 'Whiteboard_' . ucfirst($this->controller_name) . 'Controller';
+            $controller = '\Whiteboard\Whiteboard_' . ucfirst($this->controller_name) . 'Controller';
 
             if (class_exists($controller)) {
-                $this->controller = new $controller($this);//(&$this);
+                try {
+                    $this->controller = new $controller($this);//(&$this);
+                } catch(Exception $e) {
+                    var_dump($e);
+                }
 
                 if (!method_exists($this->controller, $this->method)) {
                     $this->controller = false;

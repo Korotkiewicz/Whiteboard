@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 class Whiteboard_IndexController extends Whiteboard_AbstractController {
 
     public function index_administrator() {

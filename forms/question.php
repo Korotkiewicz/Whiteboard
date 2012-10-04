@@ -1,10 +1,12 @@
 <?php
+namespace Whiteboard;
+
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/forms/abstract.php';
 
 /**
  * @author Michał Korotkiewicz
  */
-class Whiteboard_QuestionForm extends Whiteboard_AbstractForm {
+class QuestionForm extends AbstractForm {
     public function  __construct($weeks) {
         if(!$weeks || !is_array($weeks)) {
             $weeks = array();

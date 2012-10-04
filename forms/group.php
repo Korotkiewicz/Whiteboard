@@ -1,10 +1,13 @@
 <?php
+namespace Whiteboard;
+
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/forms/abstract.php';
+
 
 /**
  * @author Michał Korotkiewicz
  */
-class Whiteboard_GroupForm extends Whiteboard_AbstractForm {
+class GroupForm extends AbstractForm {
     public function  __construct($courses) {
         if(!$courses || !is_array($courses)) {
             $courses = array();

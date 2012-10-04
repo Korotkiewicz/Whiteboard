@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
 /**
  * This class has method to retrive information about user from DB:
@@ -11,7 +13,7 @@ require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
  * @author Michal Korotkiewicz
  * @copyright (c) 2012
  */
-class Whiteboard_User extends Whiteboard_Protect {
+class User extends Protect {
 
     /**
      * 
@@ -31,11 +33,11 @@ class Whiteboard_User extends Whiteboard_Protect {
         $data = eF_getTableData($table, $columns, "u.user_type = 'professor' AND u.active", 'name ASC');
 
         if ($getGroupInfo) {
-            $groups = eF_getTableData('module_whiteboard_user_to_groups utog JOIN module_whiteboard_group g ON utog.gkey = g.gkey', 'utog.login, g.gkey, g.name');
+            $groups = eF_getTableData('module_whiteboard_user_to_groups utog JOIN module_whiteboard_group g ON utog.gkey = g.gkey', 'utog.login, g.gkey');
             $userToGroup = array();
 
             foreach ($groups as $row) {
-                $userToGroup[$row['login']][$row['gkey']] = $row['name'];
+                $userToGroup[$row['login']][$row['gkey']] = $row['gkey'];
             }
 
             foreach ($data as $key => $row) {

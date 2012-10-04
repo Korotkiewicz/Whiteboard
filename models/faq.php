@@ -1,8 +1,10 @@
 <?php
 
+namespace Whiteboard;
+
 require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/protect.php';
 
-class Whiteboard_Faq extends Whiteboard_Protect {
+class Faq extends Protect {
 
     protected static $questionTable = 'module_whiteboard_faq_question';
     protected static $answerTable = 'module_whiteboard_faq_answer';
@@ -153,7 +155,7 @@ class Whiteboard_Faq extends Whiteboard_Protect {
         $maxWeekNo = $weekModel->getMaxWeekNo();
         
         $this->loadModel('group');
-        $groupModel = new Whiteboard_Group($this->gkey);
+        $groupModel = new Group($this->gkey);
 
         $return = array();
         $oldDate = '';
@@ -238,7 +240,7 @@ class Whiteboard_Faq extends Whiteboard_Protect {
 
 //================ if public version then add answer to module_faq =============
                 $this->loadModel('group');
-                $group = new Whiteboard_Group($this->gkey);
+                $group = new Group($this->gkey);
                 $gData = $group->getData();
 
                 if ($oldData) {//try to get lessons_ID

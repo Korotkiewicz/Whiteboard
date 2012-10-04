@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 class Whiteboard_FaqController extends Whiteboard_AbstractController {
 
     public function index() {
@@ -36,13 +38,13 @@ class Whiteboard_FaqController extends Whiteboard_AbstractController {
         if (!$gkey) {
             $this->loadClass('models/group');
             if ($this->userType == 'administrator') {
-                $data = Whiteboard_Group::getAllGroupInfo();
+                $data = Group::getAllGroupInfo();
             } else {
-                $data = Whiteboard_Group::getUsersGroupInfo($this->userLogin);
+                $data = Group::getUsersGroupInfo($this->userLogin);
             }
         } else {
             $this->loadClass('models/faq');
-            $model = new Whiteboard_Faq($gkey, $this->userLogin, $this->userType);
+            $model = new Faq($gkey, $this->userLogin, $this->userType);
 
             $this->loadClass('models/week', 'module_features');
             $weekModel = new ModuleFeatures_WeekModel();
@@ -63,14 +65,14 @@ class Whiteboard_FaqController extends Whiteboard_AbstractController {
         $qid = $this->getParam('qid');
 
         $this->loadClass('models/group');
-        $gmodel = new Whiteboard_Group($gkey);
+        $gmodel = new Group($gkey);
         if (!$gmodel->isOccupant($this->userLogin)) {
             echo 'false';
             exit;
         }
 
         $this->loadClass('models/faq');
-        $model = new Whiteboard_Faq($gkey, $this->userLogin);
+        $model = new Faq($gkey, $this->userLogin);
 
         if ($model->removeQuestion($qid)) {
             echo '1';
@@ -85,7 +87,7 @@ class Whiteboard_FaqController extends Whiteboard_AbstractController {
         $qid = $this->getParam('qid');
 
         $this->loadClass('models/group');
-        $gmodel = new Whiteboard_Group($gkey);
+        $gmodel = new Group($gkey);
         if (!$gmodel->isOccupant($this->userLogin)) {
             header('location: ' . $this->getLinkToView('faq', null, 'index'));
             exit;
@@ -93,12 +95,12 @@ class Whiteboard_FaqController extends Whiteboard_AbstractController {
 
 
         $this->loadClass('models/faq');
-        $model = new Whiteboard_Faq($gkey, $this->userLogin);
+        $model = new Faq($gkey, $this->userLogin);
         $weeks = $model->getWeeksForWhichUserCanAskQuestion();
 
         //form
         $this->loadClass('forms/question.php');
-        $form = new Whiteboard_QuestionForm($weeks);
+        $form = new QuestionForm($weeks);
 
         //submit
         if ($form->isSubmitted()) {
@@ -146,7 +148,7 @@ class Whiteboard_FaqController extends Whiteboard_AbstractController {
 
         if ($isAdmin && $this->userType != 'administrator') {
             $this->loadClass('models/group');
-            $gmodel = new Whiteboard_Group($gkey);
+            $gmodel = new Group($gkey);
             if (!$qid || !$gmodel->isOccupant($this->userLogin)) {
                 header('location: ' . $this->getLinkToView('faq', null, 'index'));
                 exit;
@@ -155,7 +157,7 @@ class Whiteboard_FaqController extends Whiteboard_AbstractController {
 
         //question
         $this->loadClass('models/faq');
-        $model = new Whiteboard_Faq($gkey, $this->userLogin, $this->userType);
+        $model = new Faq($gkey, $this->userLogin, $this->userType);
         $question = $model->getQuestion($qid);
 
         if (!$question) {//there is no searches question
@@ -191,7 +193,7 @@ class Whiteboard_FaqController extends Whiteboard_AbstractController {
 
         //form
         $this->loadClass('forms/answer.php');
-        $form = new Whiteboard_AnswerForm($isAdmin);
+        $form = new AnswerForm($isAdmin);
 
         //submit
         if ($form->isSubmitted()) {

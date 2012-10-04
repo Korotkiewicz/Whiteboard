@@ -1,10 +1,11 @@
 <?php
 
+use Whiteboard;
+
 /**
  * Union class is an interface to remove union server
  *
- * @author Michal Korotkiewicz
- * @copyright (c) 2012
+ * @author Michał
  */
 class Union {
 

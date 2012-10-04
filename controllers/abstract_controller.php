@@ -1,10 +1,12 @@
 <?php
 
+namespace Whiteboard;
+
 class Whiteboard_AbstractController {
 
     /**
      *
-     * @var module_whiteboard
+     * @var \module_whiteboard
      */
     var $module = false;
     var $smarty = false;
@@ -18,13 +20,13 @@ class Whiteboard_AbstractController {
     var $_message = '';
     protected $_varPrefix = 'T_WHITEBOARD_';
 
-    public function __construct(EfrontModule $module) {
+    public function __construct(\EfrontModule $module) {
 
         $this->module = $module;
         $this->smarty = $this->module->getSmartyVar();
         
         if(!$this->smarty) {
-            throw new Exception('Error with smarty');
+            throw new \Exception('Error with smarty');
         }
 
         $this->baseUrl = $this->module->moduleBaseUrl;
@@ -112,7 +114,7 @@ class Whiteboard_AbstractController {
         }
 
         $this->loadClass('models/protect');
-        $param = Whiteboard_Protect::protectDB($_GET[$name]);
+        $param = Protect::protectDB($_GET[$name]);
 
         if (empty($param)) {
             return $defaultValue;

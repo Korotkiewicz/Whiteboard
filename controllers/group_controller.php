@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 class Whiteboard_GroupController extends Whiteboard_AbstractController {
 
     public function occupantsView($gkey = null) {
@@ -8,7 +10,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
 
         if ($gkey) {
             $this->loadClass('models/group');
-            $group = new Whiteboard_Group($gkey);
+            $group = new Group($gkey);
 
             $users = $group->getOccupantList();
 
@@ -59,7 +61,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
             $this->assign('AJAX', 1);
 
             $this->loadClass('models/group');
-            $data = Whiteboard_Group::getList(false, $this->userLogin, true, false, true);
+            $data = Group::getList(false, $this->userLogin, true, false, true);
 
             $this->assign('HTTP_URL', str_replace('https', 'http', G_SERVERNAME) . $this->baseUrl);
 
@@ -72,7 +74,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         $this->loadClass('models/group');
         $this->loadClass('lib/time', 'module_applyschool');
 
-        $courses = Whiteboard_Group::getCourses();
+        $courses = Group::getCourses();
         $availableCourses = array();
 
         $courseID = $this->getParam('course');
@@ -81,12 +83,12 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         }
 
         $this->loadClass('models/user');
-        $teachers = Whiteboard_User::getTeachers();
+        $teachers = User::getTeachers();
 
         $this->assign('TEACHERS', $teachers);
         $teacher = $this->getParam('teacher');
 
-        $data = Whiteboard_Group::getList(false, $this->userType == 'professor' ? $this->userLogin : null, false, false, true);
+        $data = Group::getList(false, $this->userType == 'professor' ? $this->userLogin : null, false, false, true);
 
         $weeksToShow = 8;
         $secondsInOneDay = 86400; //60s * 60m * 24h
@@ -220,7 +222,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
             $this->assign('IS_ADMIN', $this->userType == 'administrator');
 
             $this->loadClass('models/group');
-            $data = Whiteboard_Group::getList(false, $this->userType == 'professor' ? $this->userLogin : null, $this->userType == 'professor', $this->userType == 'administrator', true);
+            $data = Group::getList(false, $this->userType == 'professor' ? $this->userLogin : null, $this->userType == 'professor', $this->userType == 'administrator', true);
 
             $data = $this->filter($data);
             $this->assign('DATA', $data);
@@ -242,7 +244,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
 
         Whiteboard_Logger::getInstance()->debug('User try to open/close group: ' . $gkey, $this->userLogin);
         try {
-            $group = new Whiteboard_Group($gkey);
+            $group = new Group($gkey);
 
             if ($this->userType == 'professor') {
                 if (!$group->isOccupant($this->userLogin)) {
@@ -310,7 +312,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         $this->assign('IS_ADMIN', $this->userType == 'administrator');
 
         $this->loadClass('models/config');
-        $config = new Whiteboard_Config('group');
+        $config = new Config('group');
         $config = $config->getConfig('default');
         $this->loadClass('lib/time', 'module_applyschool');
         $startTime = ApplySchool_strtotimeInWarsaw($config['start_date']);
@@ -318,7 +320,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         $this->assign('START_TIME', $startTime);
 
         $this->loadClass('models/group.php');
-        $group = new Whiteboard_Group($gkey);
+        $group = new Group($gkey);
 
         $pupils = $group->getPupils();
         $this->assign('PUPILS', $pupils);
@@ -339,7 +341,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
 
         //form
         $this->loadClass('forms/group.php');
-        $form = new Whiteboard_GroupForm($group->getCourses());
+        $form = new GroupForm($group->getCourses());
 
         //submit
         if ($form->isSubmitted()) {
@@ -389,7 +391,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         $gkey = $this->getParam('gkey', null);
 
         $this->loadClass('models/group');
-        $group = new Whiteboard_Group($gkey);
+        $group = new Group($gkey);
         $group->delete();
 
         header('location:' . $_SERVER['HTTP_REFERER']);
@@ -399,7 +401,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         $gkey = $this->getParam('gkey', null);
 
         $this->loadClass('models/group');
-        $group = new Whiteboard_Group($gkey);
+        $group = new Group($gkey);
         $group->undelete();
 
         header('location:' . $_SERVER['HTTP_REFERER']);
@@ -416,7 +418,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         $this->smarty->assign('gkey', $gkey);
 
         $this->loadClass('models/group');
-        $group = new Whiteboard_Group($gkey);
+        $group = new Group($gkey);
 
         $login = $this->getParam('login');
         if ($login) {
@@ -472,9 +474,9 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
 
         $this->loadClass('models/user');
         if ($type == 'student')
-            $data = Whiteboard_User::getStudentList($gkey, $this->userType != 'administrator' ? $this->userLogin : null);
+            $data = User::getStudentList($gkey, $this->userType != 'administrator' ? $this->userLogin : null);
         else
-            $data = Whiteboard_User::getProfessorList(false, $gkey);
+            $data = User::getProfessorList(false, $gkey);
 
         $this->assign('DATA', $this->filter($data));
         $this->render(false);
@@ -512,7 +514,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         $this->smarty->assign("T_MODULE_BASEURL", $this->baseUrl);
 
         $this->loadClass('models/group');
-        $group = new Whiteboard_Group($gkey);
+        $group = new Group($gkey);
 
         $data = $group->getHistory();
 
@@ -533,7 +535,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
         }
 
         $this->loadClass('models/group');
-        $group = new Whiteboard_Group($gkey);
+        $group = new Group($gkey);
         $result = $group->setNextMeeting($_POST['date'], true);
 
         if ($result === true) {

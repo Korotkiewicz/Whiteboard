@@ -1,5 +1,7 @@
 <?php
 
+namespace Whiteboard;
+
 class Whiteboard_LessonController extends Whiteboard_AbstractController {
 
     public function index() {
@@ -11,7 +13,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
         if ($correctBrowser) {
             $this->loadClass('models/group');
 
-            $groups = Whiteboard_Group::getUsersGroupInfo($this->userLogin);
+            $groups = Group::getUsersGroupInfo($this->userLogin);
 
             $this->assign('GROUPS', $groups);
         }
@@ -31,7 +33,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
             $this->loadClass('models/union');
 
             $this->assign('LOGIN', $this->userLogin);
-            $this->assign('PASSWORD', Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']));
+            $this->assign('PASSWORD', \Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']));
             $this->assign('ROOM_ID', 'pl.edu.libratus.room.dojo'); //'examples.uniondraw');//
 
             $this->getUnionConfig();
@@ -51,7 +53,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
         }
 
         $this->loadClass('models/group');
-        $group = new Whiteboard_Group($gkey);
+        $group = new Group($gkey);
 //        if (!$group->enterRoom()) {
 //            header('location: ' . $this->getLinkToView('lesson', null, 'index') . '&window=' . $_GET['window']);
 //            exit;
@@ -103,7 +105,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
     protected function getUnionConfig($test = false) {
         $this->loadClass('models/config');
 
-        $config = new Whiteboard_Config();
+        $config = new Config();
         $config = $config->getConfig();
         if ($config) {
             if ($test && $config['testserver']) {
@@ -121,7 +123,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
         $_SESSION['previousMainUrl'] = $this->getLinkToView('lesson') . '&b=index';
 
         $this->loadClass('models/group');
-        $groups = Whiteboard_Group::getUsersGroupInfo($this->userLogin);
+        $groups = Group::getUsersGroupInfo($this->userLogin);
 
         $result = array();
         if ($groups) {

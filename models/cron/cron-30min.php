@@ -39,8 +39,10 @@ require_once(G_ROOTPATH . 'libraries/database.php');
 require_once(APPLICATION_PATH . 'models/group.php');
 require_once(APPLICATION_PATH . 'models/union.php');
 
+use Whiteboard;
+
 try {
-    $groups = Whiteboard_Group::getList(false, null, null, false, true);
+    $groups = \Whiteboard\Group::getList(false, null, null, false, true);
     $history = eF_getTableData('(SELECT gkey, value, date FROM module_whiteboard_history WHERE what = \'state\' ORDER BY gkey, date DESC) AS h', 'gkey, date, value', null, null, 'gkey');
 
     $toOpen = array();
@@ -84,7 +86,7 @@ try {
                 if ($union->openRoom(Union::getRoomID($gkey))) {
                     $result += 1;
 
-                    $groupModel = new Whiteboard_Group($gkey);
+                    $groupModel = new \Whiteboard\Group($gkey);
                     $groupModel->open();
                 }
             }
@@ -95,7 +97,7 @@ try {
                 if ($union->closeRoom(Union::getRoomID($gkey))) {
                     $result += 1;
 
-                    $groupModel = new Whiteboard_Group($gkey);
+                    $groupModel = new \Whiteboard\Group($gkey);
                     $groupModel->close();
                 }
             }
