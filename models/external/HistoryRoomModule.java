@@ -36,7 +36,7 @@ public class HistoryRoomModule implements Module {
     private static Logger s_log = Logger.getLogger(HistoryRoomModule.class);
     //Database variables:
     private String databaseLogin = "unionserver";
-    private String databasePass = "BDfrjNXzfKxYMr4U";
+    private String databasePass = "";
     private Connection connect = null;
     private String query = "INSERT INTO room_message (room_id, type, value, client_id, user_id) VALUES (?,?,?,?,?)";
     private String queryFetch = "SELECT value, client_id, user_id FROM room_message WHERE room_id = ? AND date >= ? ORDER BY id ASC";
