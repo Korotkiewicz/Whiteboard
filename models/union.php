@@ -20,8 +20,12 @@ class Union {
     private $sessionID;
     private $roomID;
     private $_params = array();
+    private $default_showHistory = 1;
+    //here you can determine how many days show in history (0 or false meen not show history at all)
+    private $exception_showHistory = array('dojo' => 0);
 
     //Message types:
+
     const _MSG_MOVE = 'MOVE';
     const _MSG_PATH = 'PATH';
     const _MSG_TEXT = 'TEXT';
@@ -253,21 +257,34 @@ class Union {
      */
     public function createRoom($roomID) {
         $roomExist = false;
+        $showHistory = $this->default_showHistory;
+        
+        $rID = substr($roomID, 21, strpos($roomID, '.', 22) - 21);
+        
+        if(isset($this->exception_showHistory[$rID])) {
+            $showHistory = $this->exception_showHistory[$rID];
+        }
+        
+        $showHistory = $showHistory ? intval($showHistory) . '' : '0';
 
-        //try to create room:
-        $xml = $this->send('d', $this->makeMsgContent('u24', array($roomID, '_DIE_ON_EMPTY|false', '', '')));
+        //try to create room (with loaded historyRoomModule:|_SHOW_HISTORY_OF_DAY|' . $showHistory
+        $xml = $this->send('d', $this->makeMsgContent('u24', array($roomID, '_DIE_ON_EMPTY|false', '', 'class|pl.edu.libratus.module.room.history.HistoryRoomModule')));
         $responses = $this->parseResponse($xml);
 
         foreach ($responses as $response) {
             if ($response['messageID'] == 'u32') {
                 if ($response['status'] == 'SUCCESS' || $response['status'] == 'ROOM_EXISTS') {
-                    $roomExist = true;
+                    $roomExists = true;
                 }
                 break;
             }
         }
+//
+        if ($roomExists) {
+            $this->updateRoomAttribute($roomID, '_SHOW_HISTORY_OF_DAY', $showHistory);
+        }
 
-        return $roomExist;
+        return $roomExists;
     }
 
     /**
@@ -504,7 +521,7 @@ class Union {
                 //echo $this->_output;
                 break;
         }
-        
+
         return $result;
     }
 

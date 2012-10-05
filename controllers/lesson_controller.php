@@ -2,7 +2,7 @@
 
 namespace Whiteboard;
 
-class Whiteboard_LessonController extends Whiteboard_AbstractController {
+class LessonController extends AbstractController {
 
     public function index() {
         $this->payment();
@@ -67,7 +67,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
 
         if ($correctBrowser) {
             $this->loadClass('controllers/group_controller');
-            $groupController = new Whiteboard_GroupController($this->module);
+            $groupController = new GroupController($this->module);
             $groupController->occupantsView($gkey);
 
             $data = $group->getData();
@@ -75,8 +75,8 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
 
             $this->loadClass('models/union');
             $this->assign('LOGIN', $this->userLogin);
-            $this->assign('PASSWORD', Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']));
-            $this->assign('ROOM_ID', Union::getRoomID($gkey));
+            $this->assign('PASSWORD', \Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']));
+            $this->assign('ROOM_ID', \Union::getRoomID($gkey));
             
             if($group->isOpen()) {
                 $text = 'Zakończ';
@@ -228,7 +228,7 @@ class Whiteboard_LessonController extends Whiteboard_AbstractController {
         $paidForThisMonth = true;
         try {
             $this->loadClass('models/summarylesson', 'module_payments');
-            $model = new ModulePayments_SummaryLesson($this->userLogin);
+            $model = new \ModulePayments_SummaryLesson($this->userLogin);
 
             $paidForThisMonth = $model->checkIfPaidForThisMonth();
         } catch (Exception $e) {

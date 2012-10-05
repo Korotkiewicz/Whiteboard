@@ -2,7 +2,7 @@
 
 namespace Whiteboard;
 
-class Whiteboard_AbstractController {
+class AbstractController {
 
     /**
      *

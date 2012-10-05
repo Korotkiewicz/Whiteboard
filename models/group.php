@@ -569,7 +569,7 @@ class Group extends Protect {
      */
     public function getMeetingDateInWeek($weekNo = null, $returnOnlyOriginal = false) {
         $this->loadModel('week', 'module_features');
-        $weekModel = new ModuleFeatures_WeekModel();
+        $weekModel = new \ModuleFeatures_WeekModel();
         $actualWeekNo = $weekModel->getActualWeekNo();
 
         if (is_null($weekNo)) {

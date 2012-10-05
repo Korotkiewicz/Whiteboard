@@ -623,8 +623,10 @@ function readyListener (e) {
     chatRoom.addEventListener(net.user1.orbiter.RoomEvent.REMOVE_OCCUPANT, removeOccupantListener);  
     chatRoom.addEventListener(net.user1.orbiter.AttributeEvent.UPDATE, roomAttributeUpdateListener);
     msgManager.addMessageListener(UPC.JOINED_ROOM, joinedRoomListener, this);
+    if(pl.edu.libratus.orbiter.room.id == 'pl.edu.libratus.room.dojo') {
+        chatRoom.setAttribute('_SHOW_HISTORY_OF_DAY', 'false');//dojo not use history
+    }
     chatRoom.join();
-//    chatRoom.setAttribute(net.user1.orbiter.Tokens.REMOVE_ON_EMPTY_ATTR, 'false');
     
 }
 

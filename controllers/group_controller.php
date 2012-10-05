@@ -2,7 +2,7 @@
 
 namespace Whiteboard;
 
-class Whiteboard_GroupController extends Whiteboard_AbstractController {
+class GroupController extends AbstractController {
 
     public function occupantsView($gkey = null) {
         if (!$gkey)
@@ -39,18 +39,7 @@ class Whiteboard_GroupController extends Whiteboard_AbstractController {
     }
 
     public function index_administrator() {
-//        $this->loadClass('models/union');
-//        $union = new \Union();
-//
-//        $gkey = 'p1ew_g2';
-//
-//        if ($union->connect()) {
-//            if ($union->login($this->userLogin, \Union::createPassword($this->userLogin, $this->module->getCurrentUser()->user['id']))) {
-//                $result = $union->closeRoom(\Union::getRoomID($gkey));
-//            }
-//        }
-//
-//        var_dump($result);
+
     }
 
     public function index_professor() {

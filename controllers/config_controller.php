@@ -2,7 +2,7 @@
 
 namespace Whiteboard;
 
-class Whiteboard_ConfigController extends Whiteboard_AbstractController {
+class ConfigController extends AbstractController {
 
     public function powers_administrator() {
         $this->assign('TPL', $this->baseDir . 'views/config/ajax_powers_administrator.tpl');

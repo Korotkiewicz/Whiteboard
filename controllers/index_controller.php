@@ -2,7 +2,7 @@
 
 namespace Whiteboard;
 
-class Whiteboard_IndexController extends Whiteboard_AbstractController {
+class IndexController extends AbstractController {
 
     public function index_administrator() {
         $options = array(

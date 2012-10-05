@@ -54,7 +54,7 @@ class module_whiteboard extends EfrontModule {
 
             require_once 'controllers/abstract_controller.php';
             require_once 'controllers/' . $this->controller_name . '_controller.php';
-            $controller = '\Whiteboard\Whiteboard_' . ucfirst($this->controller_name) . 'Controller';
+            $controller = '\Whiteboard\\' . ucfirst($this->controller_name) . 'Controller';
 
             if (class_exists($controller)) {
                 try {
@@ -133,7 +133,7 @@ class module_whiteboard extends EfrontModule {
             $this->userType = $this->getCurrentUser()->user['user_type'];
         } elseif ($this->userType != 'administrator') {//if is not admin and is not added to any group then cannot see this module in left menu
             require_once G_ROOTPATH . 'www/modules/module_whiteboard/models/group.php';
-            $userGroups = Whiteboard_Group::getUsersGroupList($this->getCurrentUser()->login);
+            $userGroups = \Whiteboard\Group::getUsersGroupList($this->getCurrentUser()->login);
 
             if (!$userGroups) {
                 return array();

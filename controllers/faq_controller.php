@@ -2,7 +2,7 @@
 
 namespace Whiteboard;
 
-class Whiteboard_FaqController extends Whiteboard_AbstractController {
+class FaqController extends AbstractController {
 
     public function index() {
         if ($this->userType == 'student') {
